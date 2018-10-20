@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wxf.dao.SysUserMapper" >
+  <!-- 缓存类配置 -->
+  <!--<cache type="com.wxf.redis.RedisCache" />-->
+  <resultMap id="BaseResultMap" type="com.wxf.pojo.SysUser" >
+    <id column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="userName" property="username" jdbcType="VARCHAR" />
+    <result column="loginName" property="loginname" jdbcType="VARCHAR" />
+    <result column="operType" property="opertype" jdbcType="VARCHAR" />
+    <result column="createDate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="userPwd" property="userpwd" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectByPrimaryKey" resultType="com.wxf.pojo.SysUser" parameterType="java.lang.Integer" useCache="true">
+    select  * from sys_user
+    where id = 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sys_user
+    where userId = #{userid,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.wxf.pojo.SysUser" >
+    insert into sys_user (userId, userName, loginName, 
+      operType, createDate, userPwd
+      )
+    values (#{userid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{loginname,jdbcType=VARCHAR}, 
+      #{opertype,jdbcType=VARCHAR}, #{createdate,jdbcType=TIMESTAMP}, #{userpwd,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wxf.pojo.SysUser" >
+    insert into sys_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="username != null" >
+        userName,
+      </if>
+      <if test="loginname != null" >
+        loginName,
+      </if>
+      <if test="opertype != null" >
+        operType,
+      </if>
+      <if test="createdate != null" >
+        createDate,
+      </if>
+      <if test="userpwd != null" >
+        userPwd,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="loginname != null" >
+        #{loginname,jdbcType=VARCHAR},
+      </if>
+      <if test="opertype != null" >
+        #{opertype,jdbcType=VARCHAR},
+      </if>
+      <if test="createdate != null" >
+        #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userpwd != null" >
+        #{userpwd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.wxf.pojo.SysUser" >
+    update sys_user
+    set userName = #{username,jdbcType=VARCHAR},
+      loginName = #{loginname,jdbcType=VARCHAR},
+      operType = #{opertype,jdbcType=VARCHAR},
+      createDate = #{createdate,jdbcType=TIMESTAMP},
+      userPwd = #{userpwd,jdbcType=VARCHAR}
+    where userId = #{userid,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="getUserByUserName" resultType="com.wxf.pojo.SysUser">
+    SELECT * FROM sys_user WHERE userName=#{userName}
+  </select>
+
+
+  <select id="getRoles" resultType="com.wxf.pojo.SysRoles">
+    SELECT name FROM sys_role r,user_role ur, sys_user u WHERE r.id=ur.roleId AND ur.userId=#{userId}
+  </select>
+</mapper>
